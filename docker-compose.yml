@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: note_admin
+      POSTGRES_PASSWORD: admin2025
+      POSTGRES_DB: note_app
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    command: npm start
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
