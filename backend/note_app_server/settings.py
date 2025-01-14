@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ge0c1k_wr0x+z7y@^pm7q_1w)hv5gc^&ublptd)x^x3m%s2t+y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'notes',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'note_app_server.urls'
@@ -79,7 +84,7 @@ DATABASES = {
         'NAME': 'note_app',  # Replace with the DB name you set
         'USER': 'note_admin',       # Replace with the username you set
         'PASSWORD': 'admin2025',   # Replace with the password you set
-        'HOST': '127.0.0.1',           # Docker container host
+        'HOST': 'postgres-db',           # Docker container host
         'PORT': '5432',                # Default PostgreSQL port
     }
 }
@@ -125,3 +130,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+AUTH_USER_MODEL = 'notes.CustomUser'
