@@ -15,8 +15,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from notes.views import NoteViewSet, RegisterView, LoginView, LogoutView, UploadAudioView, SecureAudioView
+from django.conf.urls.static import static
+from django.conf import settings
+
+router = DefaultRouter()
+router.register(r'notes', NoteViewSet, basename='notes')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('auth/register/', RegisterView.as_view(), name='register'),
+    path('auth/login/', LoginView.as_view(), name='login'),
+    path('auth/logout/', LogoutView.as_view(), name='logout'),
+    
+    path('api/', include(router.urls)),
+    path('api/upload-audio/', UploadAudioView.as_view(), name='upload-audio'),
+    path('api/secure-audio/<int:note_id>/', SecureAudioView.as_view(), name='secure-audio'),
 ]
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
