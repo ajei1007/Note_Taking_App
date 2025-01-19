@@ -85,9 +85,16 @@ docker-compose up --build
 ```
 Access the application:
 
-Frontend: Navigate to http://localhost:4000 in your browser.
+Frontend: Navigate to http://localhost:3000 in your browser.
 
 Backend API: Access the API at http://localhost:8000.
+
+-migration
+
+```bash
+docker exec -it backend bash
+docker manage.py migrate
+```
 
 Stop the containers:
 
