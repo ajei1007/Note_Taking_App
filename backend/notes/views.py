@@ -25,8 +25,14 @@ class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        username = request.data.get('username')
+        identifier = request.data.get('username')
         password = request.data.get('password')
+
+        try:
+            user = CustomUser.objects.get(email=identifier)
+            username = user.username
+        except CustomUser.DoesNotExist:
+            username = identifier
 
         user = authenticate(request, username=username, password=password)
         if user:
